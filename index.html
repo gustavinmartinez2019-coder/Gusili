@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para mi niña ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===================== RESET ===================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ===================== FONDO ===================== */
+body{
+    background: linear-gradient(120deg, #ff758c, #ff7eb3);
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+/* ===================== SOBRE ===================== */
+.envelope-container{
+    position:relative;
+    width:720px;
+    height:420px;
+    cursor:pointer;
+    z-index:5;
+}
+
+.envelope{
+    position:relative;
+    width:100%;
+    height:100%;
+    background:#fff;
+    border-radius:8px;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+    overflow:hidden;
+}
+
+/* TAPA */
+.envelope::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#f7d6e0;
+    clip-path: polygon(0 0, 50% 55%, 100% 0);
+    transform-origin:top;
+    transition: transform 1s ease;
+    z-index:3;
+}
+
+/* ===================== CARTA ===================== */
+.letter{
+    position:absolute;
+    bottom:-150%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    min-height:260px;
+    height:auto;
+    background:#fff;
+    border-radius:10px;
+    padding:24px;
+    text-align:center;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    transition:bottom 1.2s ease;
+    z-index:2;
+}
+
+.letter h2{
+    color:#ff4f81;
+    margin-bottom:10px;
+}
+
+.letter p{
+    font-size:16px;
+    color:#444;
+    line-height:1.6;
+}
+
+/* ===================== FIRMA ===================== */
+.signature{
+    display:block;
+    margin-top:28px;
+    font-size:22px;
+    color:#ff4f81;
+    font-family:'Brush Script MT','Segoe Script',cursive;
+    opacity:0;
+    overflow:hidden;
+    white-space:nowrap;
+    border-right:2px solid #ff4f81;
+    width:0;
+}
+
+/* ===================== ABIERTO ===================== */
+.open .letter{
+    bottom:40px;
+}
+
+.open .envelope::before{
+    transform:rotateX(180deg);
+}
+
+/* ===================== TEXTO INFERIOR ===================== */
+.tap-text{
+    position:absolute;
+    bottom:-40px;
+    width:100%;
+    text-align:center;
+    font-size:14px;
+    color:#fff;
+    opacity:.9;
+}
+
+/* ===================== CORAZONES ===================== */
+.heart{
+    position:absolute;
+    color:#ff4f81;
+    font-size:20px;
+    animation:float 6s linear infinite;
+    opacity:.8;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh) scale(1);opacity:0;}
+    10%{opacity:1;}
+    100%{transform:translateY(-10vh) scale(1.5);opacity:0;}
+}
+
+/* ===================== BOTÓN MÚSICA ===================== */
+#musicBtn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:rgba(255,255,255,0.9);
+    border:none;
+    padding:10px 16px;
+    border-radius:30px;
+    font-size:14px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    transition:.3s;
+}
+#musicBtn:hover{transform:scale(1.05);}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:768px){
+    .envelope-container{
+        width:100%;
+        max-width:360px;
+        height:240px;
+    }
+    .letter{
+        min-height:320px;
+        padding:20px;
+    }
+    .letter p{font-size:15px;}
+    .signature{font-size:20px;}
+    .open .letter{bottom:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO -->
+<audio id="music" preload="auto" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<!-- SOBRE -->
+<div class="envelope-container" id="envelope">
+    <div class="envelope">
+        <div class="letter">
+            <h2>Para Ti ❤️</h2>
+            <p>
+                Desde que llegaste a mi vida, todo tiene más color,  
+                más sentido y más amor.  
+                Eres tan especial y tan importante para mí; tan hermosa  
+                y simpática; tan bella y carismática.  
+                Quiero que seas tú.
+                <br><br>
+                No es solo el 14 de febrero,  
+                es cada día que sonrío al pensarte.
+                <br><br>
+                Gracias por existir y por elegirme.  
+                Te amo.
+            </p>
+
+            <div class="signature" id="signature">
+                — Con amor, G 💕
+            </div>
+        </div>
+    </div>
+    <div class="tap-text">Haz clic para abrir 💌</div>
+</div>
+
+<button id="musicBtn">🔊 Música</button>
+
+<script>
+/* ===================== CORAZONES ===================== */
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = (Math.random()*15+15)+"px";
+    heart.style.animationDuration = (Math.random()*3+4)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,300);
+
+/* ===================== LÓGICA ===================== */
+const envelope = document.getElementById("envelope");
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+const firma = document.getElementById("signature");
+const textoFirma = firma.textContent;
+
+let abierto = false;
+let musicaActiva = true;
+
+envelope.addEventListener("click",()=>{
+    envelope.classList.toggle("open");
+    abierto = !abierto;
+
+    if(abierto){
+        setTimeout(escribirFirma,900);
+        if(musicaActiva){
+            music.volume = 0;
+            music.play();
+            fadeIn();
+        }
+    }else{
+        resetFirma();
+        fadeOut();
+    }
+});
+
+musicBtn.addEventListener("click",()=>{
+    musicaActiva = !musicaActiva;
+    musicBtn.textContent = musicaActiva ? "🔊 Música" : "🔇 Música";
+    if(!musicaActiva){fadeOut();}
+    else if(abierto){music.play();fadeIn();}
+});
+
+function fadeIn(){
+    let v=0;
+    const i=setInterval(()=>{
+        if(v<0.4){v+=0.02;music.volume=v;}
+        else clearInterval(i);
+    },200);
+}
+function fadeOut(){
+    let v=music.volume;
+    const i=setInterval(()=>{
+        if(v>0){v-=0.02;music.volume=v;}
+        else{clearInterval(i);music.pause();}
+    },200);
+}
+
+function escribirFirma(){
+    firma.textContent="";
+    firma.style.opacity=1;
+    firma.style.width="0";
+    firma.style.borderRight="2px solid #ff4f81";
+    let i=0;
+    const t=setInterval(()=>{
+        if(i<textoFirma.length){
+            firma.textContent+=textoFirma.charAt(i);
+            firma.style.width=(i+1)+"ch";
+            i++;
+        }else{
+            clearInterval(t);
+            firma.style.borderRight="none";
+        }
+    },120);
+}
+function resetFirma(){
+    firma.textContent=textoFirma;
+    firma.style.opacity=0;
+    firma.style.width="0";
+    firma.style.borderRight="2px solid #ff4f81";
+}
+</script>
+
+</body>
+</html>
+
